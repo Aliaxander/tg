@@ -26,6 +26,7 @@ class TelegramController extends App
 {
     public function get()
     {
+   
         echo 1;
     }
 }
