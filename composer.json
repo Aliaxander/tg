@@ -1,0 +1,61 @@
+{
+  "name": "ox/cpa",
+  "description": "OxCPA.Ru",
+  "require": {
+    "filp/whoops": "~2",
+    "symfony/http-kernel": "~3.1",
+    "twig/tracelytics": "@dev",
+    "symfony/console": "~3.1",
+    "doctrine/migrations": "1.*",
+    "fzaninotto/faker": "~1.6",
+    "maxmind-db/reader": "1.1.*",
+    "symfony/filesystem": "~3.1",
+    "mtdowling/cron-expression": "@dev",
+    "michelf/php-markdown": "~1.7",
+    "symfony/finder": "~3.1",
+    "twig/extensions": "1.4.*",
+    "ox/cbr": "@dev",
+    "ox/ox-framework": "@dev",
+    "ox/router": "@dev",
+    "ox/fixer": "@dev",
+    "ox/database": "@dev",
+    "firebase/php-jwt": "~4",
+    "lusitanian/oauth": "0.8.*",
+    "serps/core": "@dev",
+    "serps/http-client-curl": "@dev",
+    "serps/search-engine-google": "@dev",
+    "tabgeo/country": "~1",
+    "guzzlehttp/guzzle": "~6",
+    "packaged/docblock": "0.1.*",
+    "cebe/markdown": "~1.1",
+    "stojg/crop": "~1.2",
+    "phpunit/phpunit": "5.6.*",
+    "irazasyed/telegram-bot-sdk": "~2"
+  },
+  "repositories": [
+    {
+      "type": "git",
+      "url": "git@github.com:OxGroup/OX-Framework.git"
+    },
+    {
+      "type": "git",
+      "url": "git@github.com:OxGroup/DataBase.git"
+    },
+    {
+      "type": "git",
+      "url": "git@github.com:OxGroup/Router.git"
+    }
+  ],
+  "autoload": {
+    "psr-2": {
+      "OxApp": "OxApp/",
+      "OxApp\\controllers": "OxApp/controllers",
+      "OxApp\\models": "OxApp/models"
+    },
+    "classmap": [
+      "OxApp/",
+      "OxApp/controllers",
+      "OxApp/models"
+    ]
+  }
+}
