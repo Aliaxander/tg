@@ -1,9 +1,9 @@
 <?php
 use Ox\DataBase\DbConfig;
 
-$config = include("migrations-db.php");
+$config = @include("migrations-db.php");
 
-DbConfig::$dbhost = $config["host"];
-DbConfig::$dbname = $config["dbname"];
-DbConfig::$dbuser = $config["user"];
-DbConfig::$dbuserpass = $config["password"];
+DbConfig::$dbhost = @$config["host"];
+DbConfig::$dbname = @$config["dbname"];
+DbConfig::$dbuser = @$config["user"];
+DbConfig::$dbuserpass = @$config["password"];
