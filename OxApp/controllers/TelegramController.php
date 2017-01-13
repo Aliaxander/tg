@@ -156,9 +156,12 @@ class TelegramController extends App
         ]);
     }
     
+    /**
+     * post
+     */
     public function post()
     {
-        
+        $this->get();
     }
 }
 
