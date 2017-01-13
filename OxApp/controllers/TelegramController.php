@@ -26,12 +26,6 @@ class TelegramController extends App
 {
     public function get()
     {
-        $telegram = new Api("296504384:AAEFESDASMwjNmneHcDmanAF9nNBO0GA44g");
-    
-        print_r($telegram->sendMessage([
-            'chat_id' => '-1001082111611@',
-            'text' => '123'
-        ]));
         echo 1;
     }
 }
