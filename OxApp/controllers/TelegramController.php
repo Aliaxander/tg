@@ -16,6 +16,11 @@ namespace OxApp\controllers;
 
 use Ox\App;
 
+/**
+ * Class TelegramController
+ *
+ * @package OxApp\controllers
+ */
 class TelegramController extends App
 {
     public function get()
