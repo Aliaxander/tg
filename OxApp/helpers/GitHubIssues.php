@@ -58,4 +58,19 @@ class GitHubIssues
             }
         }
     }
+    
+    /**
+     * @return array
+     */
+    public static function getRepos()
+    {
+        $client = new \GitHubClient();
+        $client->setCredentials("webci", "6LxOyIoSnJG8zYCQeARE");
+        $result = [];
+        $repos = $client->repos->listOrganizationRepositories("OxGroup");
+        foreach ($repos as $repo) {
+            $result[]= $repo->getName();
+        }
+        return $result;
+    }
 }
