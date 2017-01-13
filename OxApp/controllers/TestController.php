@@ -25,7 +25,6 @@ use OxApp\models\Users;
  */
 class TestController extends App
 {
-    
     public function get()
     {
         $users = Users::selectBy(

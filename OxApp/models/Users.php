@@ -19,5 +19,4 @@ use Faker\Factory;
 class Users extends AbstractModel
 {
     protected static $from = 'users';
-
 }
