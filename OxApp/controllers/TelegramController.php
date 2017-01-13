@@ -81,6 +81,12 @@ class TelegramController extends App
             case ("/шуткани"):
                 $this->sendFun();
                 break;
+            case ("/help"):
+                $this->sendHelp();
+                break;
+            case ("/help@OxCPA_bot"):
+                $this->sendHelp();
+                break;
         }
     }
     
@@ -146,6 +152,17 @@ class TelegramController extends App
         $response = $telegram->sendMessage([
             'chat_id' => $this->chatId . '@',
             'text' => $message
+        ]);
+    }
+    
+    public function sendHelp()
+    {
+        $API_KEY = '296504384:AAEFESDASMwjNmneHcDmanAF9nNBO0GA44g';
+        $telegram = new Api($API_KEY);
+        $message = "Добавить issue /issue\nШуткунуть - /шуткануть\nПротестировать постбек - https://bot.oxgroup.media/request (http/https)";
+        $response = $telegram->sendMessage([
+            'chat_id' => '-1001082111611@',
+            'text' => $message,
         ]);
     }
     
