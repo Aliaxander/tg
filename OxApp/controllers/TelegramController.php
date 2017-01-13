@@ -18,6 +18,7 @@ use OxApp\helpers\GitHubIssues;
 use OxApp\models\UpdateId;
 use Telegram\Bot\Api;
 use Ox\App;
+
 /**
  * Class TelegramController
  *
@@ -36,10 +37,10 @@ class TelegramController extends App
         //
         //        $messages = $telegram->getUpdates(["offset" => -1]);
         // foreach ($messages as $message) {
-        $message=$telegram->getWebhookUpdate();
+        $message = $telegram->getWebhookUpdate();
         print_r($message);
         $messId = $message->getMessage()->get("message_id");
-      
+        
         $updateId = $message->getUpdateId();
         //if (UpdateId::find(["updateId" => $updateId])->count == 0) {
         $text = $message->getMessage()->get("text");
@@ -153,6 +154,11 @@ class TelegramController extends App
             'reply_markup' => $telegram->replyKeyboardHide(['selective' => true]),
             'reply_to_message_id' => $replayTo
         ]);
+    }
+    
+    public function post()
+    {
+        
     }
 }
 
