@@ -93,11 +93,11 @@ class TelegramController extends App
         $i = 0;
         $i2 = 0;
         foreach ($repos as $repo) {
-            $i++;
-            if ($i > 3) {
+            if ($i > 4) {
                 $i = 0;
                 $i2++;
             }
+            $i++;
             $keyboard[$i2][] = $repo;
         }
         
