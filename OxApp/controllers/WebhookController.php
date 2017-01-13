@@ -47,5 +47,4 @@ class WebhookController extends App
     {
         $this->get();
     }
-    
 }
