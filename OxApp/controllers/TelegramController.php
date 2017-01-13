@@ -132,7 +132,7 @@ class TelegramController extends App
     {
         $API_KEY = '296504384:AAEFESDASMwjNmneHcDmanAF9nNBO0GA44g';
         $telegram = new Api($API_KEY);
-        //new+aforizm
+        
         $array = ["new+aforizm", "new+anekdot"];
         $rand = rand(0, 1);
         if ($rand == 0) {

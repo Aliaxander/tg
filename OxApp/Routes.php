@@ -15,3 +15,5 @@ Router::$requestDriver = DefaultRequest::getRequest();
 Router::rout('/test')->app('Test')->save();
 Router::rout('/telega')->app('Telegram')->save();
 Router::rout('/webhook')->app('Webhook')->save();
+
+Router::rout('/request')->app('SandRequest')->save();
