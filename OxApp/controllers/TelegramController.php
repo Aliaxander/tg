@@ -55,11 +55,11 @@ class TelegramController extends App
                 $repo = explode("[", $replay);
                 $repo = str_replace("]", "", $repo[1]);
                 GitHubIssues::addIssue($text, $text, "OxGroup/" . $repo);
-//                $telegram->sendMessage([
-//                    'chat_id' => $this->chatId . '@',
-//                    'text' => 'Add github issue: ' . $text . ' for repo: ' . $repo,
-//                    'reply_to_message_id' => $messId
-//                ]);
+                //                $telegram->sendMessage([
+                //                    'chat_id' => $this->chatId . '@',
+                //                    'text' => 'Add github issue: ' . $text . ' for repo: ' . $repo,
+                //                    'reply_to_message_id' => $messId
+                //                ]);
             } else {
                 $this->hideKey($messId);
                 $reply_markup = $telegram->forceReply(['selective' => true]);
@@ -73,6 +73,9 @@ class TelegramController extends App
         }
         switch ($text) {
             case ("/issue"):
+                $this->addKeyboardRepo($messId);
+                break;
+            case ("/issue@OxCPA_bot"):
                 $this->addKeyboardRepo($messId);
                 break;
         }
