@@ -14,14 +14,10 @@
 
 namespace OxApp\controllers;
 
-use OxApp\commands\StartCommand;
 use OxApp\helpers\GitHubIssues;
 use OxApp\models\UpdateId;
 use Telegram\Bot\Api;
 use Ox\App;
-use Telegram\Bot\Commands\CommandBus;
-use Telegram\Bot\Commands\HelpCommand;
-
 /**
  * Class TelegramController
  *
@@ -29,91 +25,90 @@ use Telegram\Bot\Commands\HelpCommand;
  */
 class TelegramController extends App
 {
-    public $chatId = '-1001082111611';//"-";
+    public $chatId = '-180470639';//"-";
     
     public function get()
     {
         echo "<pre>";
         $API_KEY = '296504384:AAEFESDASMwjNmneHcDmanAF9nNBO0GA44g';
         $telegram = new Api($API_KEY);
-        //        print_r($telegram->sendMessage([
-        //            'chat_id' => '-1001082111611@',
-        //            'text' => "100 пудов Саня шикарен. Тащусь просто."
-        //        ]));
-        //$messages = $telegram->getUpdates();
-        $messages = $telegram->getUpdates(["offset" => -1]);
-        foreach ($messages as $message) {
-            $messId = $message->getMessage()->get("message_id");
-            print_r($message);
-            $updateId = $message->getUpdateId();
-            //if (UpdateId::find(["updateId" => $updateId])->count == 0) {
-            $text = $message->getMessage()->get("text");
-            echo $text;
-            if (!empty($message->getMessage()->getReplyToMessage())) {
-                $replay = @$message->getMessage()->getReplyToMessage()->getText();
-            }
-            if (!empty($replay)) {
-                $replayResult = explode("[", $replay);
-                
-                if ($replayResult[0] == "Send me issue message for repo ") {
-                    $repo = explode("[", $replay);
-                    $repo = str_replace("]", "", $repo[1]);
-                    GitHubIssues::addIssue($text, $text, "OxGroup/" . $repo);
-                    $telegram->sendMessage([
-                        'chat_id' => $this->chatId . '@',
-                        'text' => 'Add github issue: ' . $text . ' for repo: ' . $repo,
-                        'reply_to_message_id' => $messId
-                    ]);
-                } else {
-                    $this->hideKey($messId);
-                    $reply_markup = $telegram->forceReply(['selective' => true]);
-                    $response = $telegram->sendMessage([
-                        'chat_id' => $this->chatId . '@',
-                        'text' => 'Send me issue message for repo [' . $text . ']',
-                        'reply_markup' => $reply_markup,
-                        'reply_to_message_id' => $messId
-                    ]);
-                }
-            }
-            switch ($text) {
-                case ("/issue"):
-                    $this->addKeyboardRepo($messId);
-                    break;
-            }
-            //                $bot = $message->getMessage()->get("entities");
-            //                if (empty($bot)) {
-            //                    $chat = $message->getMessage()->get("chat");
-            //                    $text = $message->getMessage()->get("text");
-            //                    $messId = $message->getMessage()->get("message_id") . "_" . $message->getMessage()->get("date");
-            //                    print_r($bot);
-            //                    if ($text == "/ты читаешь нас?") {
-            //                        $answer = "Вижу только все, что на \"/\"";
-            //
-            //                    } elseif ($text == "/Кто тут самый крутой?") {
-            //                        $answer = "Саня?";
-            //                    }
-            //                    print_r($telegram->sendMessage([
-            //                        'chat_id' => '-1001082111611@',
-            //                        'text' => $answer
-            //                    ]));
-            //                    echo "$text";
-            //                } else {
-            //                    $text = $message->getMessage()->get("text");
-            //                    echo "Command: $text";
-            //                    $command = explode(" > ", $text);
-            //                    print_r($command);
-            //                    $commandBot = @$command[0];
-            //                    $repo = @$command[1];
-            //                    $message = @$command[2];
-            //                    if ($commandBot === "/issue") {
-            //                        GitHubIssues::addIssue($message, $message, "OxGroup/" . $repo);
-            //                        echo "Repo: $repo";
-            //                        echo "title/message: $message";
-            //                    }
-            //                }
-            //   UpdateId::add(['updateId' => $updateId]);
-            // }
+        //        $response = $telegram->setWebhook(['url' => 'https://example.com/<token>/webhook']);
+        //
+        //        $messages = $telegram->getUpdates(["offset" => -1]);
+        // foreach ($messages as $message) {
+        $message=$telegram->getWebhookUpdate();
+        print_r($message);
+        $messId = $message->getMessage()->get("message_id");
+      
+        $updateId = $message->getUpdateId();
+        //if (UpdateId::find(["updateId" => $updateId])->count == 0) {
+        $text = $message->getMessage()->get("text");
+        echo $text;
+        if (!empty($message->getMessage()->getReplyToMessage())) {
+            $replay = @$message->getMessage()->getReplyToMessage()->getText();
         }
+        if (!empty($replay)) {
+            $replayResult = explode("[", $replay);
+            
+            if ($replayResult[0] == "Send me issue message for repo ") {
+                $repo = explode("[", $replay);
+                $repo = str_replace("]", "", $repo[1]);
+                GitHubIssues::addIssue($text, $text, "OxGroup/" . $repo);
+                $telegram->sendMessage([
+                    'chat_id' => $this->chatId . '@',
+                    'text' => 'Add github issue: ' . $text . ' for repo: ' . $repo,
+                    'reply_to_message_id' => $messId
+                ]);
+            } else {
+                $this->hideKey($messId);
+                $reply_markup = $telegram->forceReply(['selective' => true]);
+                $response = $telegram->sendMessage([
+                    'chat_id' => $this->chatId . '@',
+                    'text' => 'Send me issue message for repo [' . $text . ']',
+                    'reply_markup' => $reply_markup,
+                    'reply_to_message_id' => $messId
+                ]);
+            }
+        }
+        switch ($text) {
+            case ("/issue"):
+                $this->addKeyboardRepo($messId);
+                break;
+        }
+        //                $bot = $message->getMessage()->get("entities");
+        //                if (empty($bot)) {
+        //                    $chat = $message->getMessage()->get("chat");
+        //                    $text = $message->getMessage()->get("text");
+        //                    $messId = $message->getMessage()->get("message_id") . "_" . $message->getMessage()->get("date");
+        //                    print_r($bot);
+        //                    if ($text == "/ты читаешь нас?") {
+        //                        $answer = "Вижу только все, что на \"/\"";
+        //
+        //                    } elseif ($text == "/Кто тут самый крутой?") {
+        //                        $answer = "Саня?";
+        //                    }
+        //                    print_r($telegram->sendMessage([
+        //                        'chat_id' => '-1001082111611@',
+        //                        'text' => $answer
+        //                    ]));
+        //                    echo "$text";
+        //                } else {
+        //                    $text = $message->getMessage()->get("text");
+        //                    echo "Command: $text";
+        //                    $command = explode(" > ", $text);
+        //                    print_r($command);
+        //                    $commandBot = @$command[0];
+        //                    $repo = @$command[1];
+        //                    $message = @$command[2];
+        //                    if ($commandBot === "/issue") {
+        //                        GitHubIssues::addIssue($message, $message, "OxGroup/" . $repo);
+        //                        echo "Repo: $repo";
+        //                        echo "title/message: $message";
+        //                    }
+        //                }
+        //   UpdateId::add(['updateId' => $updateId]);
+        // }
+        //  }
     }
     
     public function addKeyboardRepo($replayTo)

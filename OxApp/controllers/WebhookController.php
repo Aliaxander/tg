@@ -45,7 +45,7 @@ class WebhookController extends App
         $telegram = new Api("296504384:AAEFESDASMwjNmneHcDmanAF9nNBO0GA44g");
         
         print_r($telegram->sendMessage([
-            'chat_id' => '-1001082111611@',
+            'chat_id' => '-180470639@',
             'text' => $message
         ]));
     }
