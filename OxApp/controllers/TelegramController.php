@@ -26,7 +26,7 @@ use Ox\App;
  */
 class TelegramController extends App
 {
-    public $chatId = '-180470639';//"-";
+    public $chatId = '-1001082111611';//"-";
     
     public function get()
     {
@@ -55,11 +55,11 @@ class TelegramController extends App
                 $repo = explode("[", $replay);
                 $repo = str_replace("]", "", $repo[1]);
                 GitHubIssues::addIssue($text, $text, "OxGroup/" . $repo);
-                $telegram->sendMessage([
-                    'chat_id' => $this->chatId . '@',
-                    'text' => 'Add github issue: ' . $text . ' for repo: ' . $repo,
-                    'reply_to_message_id' => $messId
-                ]);
+//                $telegram->sendMessage([
+//                    'chat_id' => $this->chatId . '@',
+//                    'text' => 'Add github issue: ' . $text . ' for repo: ' . $repo,
+//                    'reply_to_message_id' => $messId
+//                ]);
             } else {
                 $this->hideKey($messId);
                 $reply_markup = $telegram->forceReply(['selective' => true]);
@@ -76,40 +76,6 @@ class TelegramController extends App
                 $this->addKeyboardRepo($messId);
                 break;
         }
-        //                $bot = $message->getMessage()->get("entities");
-        //                if (empty($bot)) {
-        //                    $chat = $message->getMessage()->get("chat");
-        //                    $text = $message->getMessage()->get("text");
-        //                    $messId = $message->getMessage()->get("message_id") . "_" . $message->getMessage()->get("date");
-        //                    print_r($bot);
-        //                    if ($text == "/ты читаешь нас?") {
-        //                        $answer = "Вижу только все, что на \"/\"";
-        //
-        //                    } elseif ($text == "/Кто тут самый крутой?") {
-        //                        $answer = "Саня?";
-        //                    }
-        //                    print_r($telegram->sendMessage([
-        //                        'chat_id' => '-1001082111611@',
-        //                        'text' => $answer
-        //                    ]));
-        //                    echo "$text";
-        //                } else {
-        //                    $text = $message->getMessage()->get("text");
-        //                    echo "Command: $text";
-        //                    $command = explode(" > ", $text);
-        //                    print_r($command);
-        //                    $commandBot = @$command[0];
-        //                    $repo = @$command[1];
-        //                    $message = @$command[2];
-        //                    if ($commandBot === "/issue") {
-        //                        GitHubIssues::addIssue($message, $message, "OxGroup/" . $repo);
-        //                        echo "Repo: $repo";
-        //                        echo "title/message: $message";
-        //                    }
-        //                }
-        //   UpdateId::add(['updateId' => $updateId]);
-        // }
-        //  }
     }
     
     public function addKeyboardRepo($replayTo)
