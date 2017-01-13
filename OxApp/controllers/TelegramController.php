@@ -93,7 +93,7 @@ class TelegramController extends App
         $i = 0;
         $i2 = 0;
         foreach ($repos as $repo) {
-            if ($i > 4) {
+            if ($i > 3) {
                 $i = 0;
                 $i2++;
             }
