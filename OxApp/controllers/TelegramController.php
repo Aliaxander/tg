@@ -132,11 +132,20 @@ class TelegramController extends App
     {
         $API_KEY = '296504384:AAEFESDASMwjNmneHcDmanAF9nNBO0GA44g';
         $telegram = new Api($API_KEY);
-        $anekdot = file_get_contents("http://www.umori.li/api/get?site=anekdot.ru&name=new+anekdot&num=100");
+        //new+aforizm
+        $array = ["new+aforizm", "new+anekdot"];
+        $rand = rand(0, 1);
+        if ($rand == 0) {
+            $maxRand = 10;
+        } else {
+            $maxRand = 40;
+        }
+        $anekdot = file_get_contents("http://www.umori.li/api/get?site=anekdot.ru&name={$array[$rand]}&num=100");
         $anekdot = json_decode($anekdot);
+        $message = @$anekdot[rand(0, $maxRand)]->elementPureHtml;
         $response = $telegram->sendMessage([
             'chat_id' => $this->chatId . '@',
-            'text' => @$anekdot[rand(0, 40)]->elementPureHtml
+            'text' => $message
         ]);
     }
     
