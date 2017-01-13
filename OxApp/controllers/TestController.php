@@ -28,9 +28,10 @@ class TestController extends App
 {
     public function get()
     {
-        $API_KEY = '296504384:AAEFESDASMwjNmneHcDmanAF9nNBO0GA44g';
-        $telegram = new Api($API_KEY);
-        $response = $telegram->setWebhook(['url' => 'https://bot.oxgroup.media/telega']);
+ 
+//        $API_KEY = '296504384:AAEFESDASMwjNmneHcDmanAF9nNBO0GA44g';
+//        $telegram = new Api($API_KEY);
+//        $response = $telegram->setWebhook(['url' => 'https://bot.oxgroup.media/telega']);
 //        $users = Users::selectBy(
 //            'id',
 //            'dateCreate',

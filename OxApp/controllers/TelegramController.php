@@ -78,6 +78,9 @@ class TelegramController extends App
             case ("/issue@OxCPA_bot"):
                 $this->addKeyboardRepo($messId);
                 break;
+            case ("/шуткани"):
+                $this->sendFun();
+                break;
         }
     }
     
@@ -122,6 +125,18 @@ class TelegramController extends App
             'text' => 'Ok.',
             'reply_markup' => $telegram->replyKeyboardHide(['selective' => true]),
             'reply_to_message_id' => $replayTo
+        ]);
+    }
+    
+    public function sendFun()
+    {
+        $API_KEY = '296504384:AAEFESDASMwjNmneHcDmanAF9nNBO0GA44g';
+        $telegram = new Api($API_KEY);
+        $anekdot = file_get_contents("http://www.umori.li/api/get?site=anekdot.ru&name=new+anekdot&num=100");
+        $anekdot = json_decode($anekdot);
+        $response = $telegram->sendMessage([
+            'chat_id' => $this->chatId . '@',
+            'text' => @$anekdot[rand(0, 40)]->elementPureHtml
         ]);
     }
     
