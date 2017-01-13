@@ -33,7 +33,7 @@ class WebhookController extends App
         $commit = $payload->head_commit->id;
         $message = $payload->head_commit->message;
         $repo = $payload->repository->full_name;
-        $message = "[$repo] New commit #{$commit} - {$sender}: {$message}";
+        $message = "[$repo] New commit {$commit} - {$sender}: {$message}";
         //chatId=132514008
         $telegram = new Api("296504384:AAEFESDASMwjNmneHcDmanAF9nNBO0GA44g");
         
