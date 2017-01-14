@@ -174,7 +174,7 @@ class TelegramController extends App
     {
         $API_KEY = '296504384:AAEFESDASMwjNmneHcDmanAF9nNBO0GA44g';
         $telegram = new Api($API_KEY);
-        $message = "Добавить issue /issue\nШуткунуть - /шуткануть\nПротестировать постбек - https://bot.oxgroup.media/request (http/https)";
+        $message = "Добавить issue: /issue\nШуткануть: /шуткануть\nПротестировать постбек: https://bot.oxgroup.media/request (http/https)";
         $response = $telegram->sendMessage([
             'chat_id' => '-1001082111611@',
             'text' => $message,
