@@ -51,21 +51,27 @@ class TelegramController extends App
         if (!empty($replay)) {
             $replayResult = explode("[", $replay);
             
-            if ($replayResult[0] == "Send me issue message for repo ") {
-                $repo = explode("[", $replay);
-                $repo = str_replace("]", "", $repo[1]);
-                GitHubIssues::addIssue($text, $text, "OxGroup/" . $repo);
-                //                $telegram->sendMessage([
-                //                    'chat_id' => $this->chatId . '@',
-                //                    'text' => 'Add github issue: ' . $text . ' for repo: ' . $repo,
-                //                    'reply_to_message_id' => $messId
-                //                ]);
+            if ($replayResult[0] == "Send me issue title for repo ") {
+                $this->hideKey($messId);
+                $reply_markup = $telegram->forceReply(['selective' => true]);
+                $repo = str_replace("]", "", $replayResult[1]);
+                $response = $telegram->sendMessage([
+                    'chat_id' => $this->chatId . '@',
+                    'text' => 'Send me issue message for repo [' . $repo . '][Title: ' . $text . ']',
+                    'reply_markup' => $reply_markup,
+                    'reply_to_message_id' => $messId
+                ]);
+            } elseif ($replayResult[0] == "Send me issue message for repo ") {
+                $repo = str_replace("]", "", $replayResult[1]);
+                $title = str_replace(["Title: ", "]"], "", $replayResult[2]);
+                
+                GitHubIssues::addIssue($title, $text, "OxGroup/" . $repo);
             } else {
                 $this->hideKey($messId);
                 $reply_markup = $telegram->forceReply(['selective' => true]);
                 $response = $telegram->sendMessage([
                     'chat_id' => $this->chatId . '@',
-                    'text' => 'Send me issue message for repo [' . $text . ']',
+                    'text' => 'Send me issue title for repo [' . $text . ']',
                     'reply_markup' => $reply_markup,
                     'reply_to_message_id' => $messId
                 ]);
