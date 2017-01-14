@@ -126,10 +126,11 @@ class TelegramController extends App
     {
         $API_KEY = '296504384:AAEFESDASMwjNmneHcDmanAF9nNBO0GA44g';
         $telegram = new Api($API_KEY);
+        $reply_markup = $telegram->forceReply(['selective' => true]);
         $response = $telegram->sendMessage([
             'chat_id' => $this->chatId . '@',
             'text' => 'Sand me landing url.',
-            'reply_markup' => $telegram->replyKeyboardHide(['selective' => true]),
+            'reply_markup' => $reply_markup,
             'reply_to_message_id' => $replayTo
         ]);
     }
