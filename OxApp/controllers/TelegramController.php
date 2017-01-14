@@ -64,7 +64,7 @@ class TelegramController extends App
             } elseif ($replayResult[0] == "Send me issue message for repo ") {
                 $repo = str_replace("]", "", $replayResult[1]);
                 $title = str_replace(["Title: ", "]"], "", $replayResult[2]);
-                
+                $text = $this->autoMarkdownMessage($text);
                 GitHubIssues::addIssue($title, $text, "OxGroup/" . $repo);
             } else {
                 $this->hideKey($messId);
@@ -94,6 +94,15 @@ class TelegramController extends App
                 $this->sendHelp();
                 break;
         }
+    }
+    
+    private function autoMarkdownMessage($message)
+    {
+        $content = preg_replace(
+            '#((http|https)://[^\s]+(?=\.(jpe?g|png|gif)))(\.(jpe?g|png|gif))#i', '![]($1.$3)', $message
+        );
+        
+        return $content;
     }
     
     public function addKeyboardRepo($replayTo)
