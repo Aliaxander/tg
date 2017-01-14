@@ -66,6 +66,17 @@ class TelegramController extends App
                 $title = str_replace(["Title: ", "]"], "", $replayResult[2]);
                 $text = $this->autoMarkdownMessage($text);
                 GitHubIssues::addIssue($title, $text, "OxGroup/" . $repo);
+            } elseif ($replay == 'Sand me landing url.') {
+                $dataResult = @file_get_contents(
+                    "http://landings.oxgroup.media/addLanding?key=3driwjtvikcxjz09dffs&url=" .
+                    $text
+                );
+                $this->hideKey($messId);
+                $response = $telegram->sendMessage([
+                    'chat_id' => $this->chatId . '@',
+                    'text' => 'Add landing task #' . $dataResult,
+                    'reply_to_message_id' => $messId
+                ]);
             } else {
                 $this->hideKey($messId);
                 $reply_markup = $telegram->forceReply(['selective' => true]);
@@ -93,6 +104,12 @@ class TelegramController extends App
             case ("/help@OxCPA_bot"):
                 $this->sendHelp();
                 break;
+            case ('/addland'):
+                $this->addLanding($messId);
+                break;
+            case ('/addland@OxCPA_bot'):
+                $this->addLanding($messId);
+                break;
         }
     }
     
@@ -103,6 +120,18 @@ class TelegramController extends App
         );
         
         return $content;
+    }
+    
+    private function addLanding($replayTo)
+    {
+        $API_KEY = '296504384:AAEFESDASMwjNmneHcDmanAF9nNBO0GA44g';
+        $telegram = new Api($API_KEY);
+        $response = $telegram->sendMessage([
+            'chat_id' => $this->chatId . '@',
+            'text' => 'Sand me landing url.',
+            'reply_markup' => $telegram->replyKeyboardHide(['selective' => true]),
+            'reply_to_message_id' => $replayTo
+        ]);
     }
     
     public function addKeyboardRepo($replayTo)
@@ -174,7 +203,7 @@ class TelegramController extends App
     {
         $API_KEY = '296504384:AAEFESDASMwjNmneHcDmanAF9nNBO0GA44g';
         $telegram = new Api($API_KEY);
-        $message = "Добавить issue: /issue\nШуткануть: /шуткануть\nПротестировать постбек: https://bot.oxgroup.media/request (http/https)";
+        $message = "Добавить issue: /issue\nДобавить лендинг: /addland\nПротестировать постбек: https://bot.oxgroup.media/request (http/https)\nШуткануть: /шуткануть";
         $response = $telegram->sendMessage([
             'chat_id' => '-1001082111611@',
             'text' => $message,
