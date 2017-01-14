@@ -40,6 +40,12 @@ class WebhookController extends App
             $url = $payload->issue->html_url;
             $text = $payload->issue->title;
             $message = "New issue [$repository]: {$text} {$url}";
+        } elseif (!empty($payload->issue) && $payload->action == 'closed') {
+            $repository = $payload->repository->full_name;
+            $url = $payload->issue->html_url;
+            $title = $payload->issue->title;
+            $sender = $payload->sender->login;
+            $message = "{$sender} closed issue [$repository]: {$title} {$url}";
         }
         //chatId=132514008
         $telegram = new Api("296504384:AAEFESDASMwjNmneHcDmanAF9nNBO0GA44g");
