@@ -35,10 +35,10 @@ class WebhookController extends App
             $message = $payload->head_commit->message;
             $repo = $payload->repository->full_name;
             $message = "[$repo] New commit {$commit} - {$sender}: {$message}";
-        } elseif (!empty($payload->issue)) {
+        } elseif (!empty($payload->issue) && $payload->action == 'opened') {
             $repository = $payload->repository->full_name;
             $url = $payload->issue->html_url;
-            $text= $payload->issue->title;
+            $text = $payload->issue->title;
             $message = "New issue [$repository]: {$text} {$url}";
         }
         //chatId=132514008
