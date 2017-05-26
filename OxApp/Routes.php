@@ -12,5 +12,5 @@ use OxApp\helpers\DefaultRequest;
 //
 //RouteMiddleware::$debug=false;
 Router::$requestDriver = DefaultRequest::getRequest();
-Router::rout('/:text=>id')->app('Test')->save();
+Router::rout('/:text=>id/:text=>img')->app('Test')->save();
 Router::rout('/webhook')->app('Webhook')->save();

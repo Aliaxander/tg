@@ -29,6 +29,7 @@ class TestController extends App
     public function get()
     {
        $id=$this->request->get('id');
-       View::build('users',['id'=>trim($id)]);
+       $img=$this->request->get('img');
+       View::build('users',['id'=>trim($id),'img'=>trim(base64_decode($img))]);
     }
 }
