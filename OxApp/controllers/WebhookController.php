@@ -27,32 +27,13 @@ class WebhookController extends App
     public function get()
     {
         $text = $this->request->request->all();
-        $payload = json_decode($text["payload"]);
-        //$pusher = $payload->pusher;
-        if (!empty($payload->head_commit->id)) {
-            $sender = $payload->sender->login;
-            $commit = $payload->head_commit->id;
-            $message = $payload->head_commit->message;
-            $repo = $payload->repository->full_name;
-            $message = "[$repo] New commit {$commit} - {$sender}: {$message}";
-        } elseif (!empty($payload->issue) && $payload->action == 'opened') {
-            $repository = $payload->repository->full_name;
-            $url = $payload->issue->html_url;
-            $text = $payload->issue->title;
-            $message = "New issue [$repository]: {$text} {$url}";
-        } elseif (!empty($payload->issue) && $payload->action == 'closed') {
-            $repository = $payload->repository->full_name;
-            $url = $payload->issue->html_url;
-            $title = $payload->issue->title;
-            $sender = $payload->sender->login;
-            $message = "{$sender} closed issue [$repository]: {$title} {$url}";
-        }
+     
         //chatId=132514008
-        $telegram = new Api("296504384:AAEFESDASMwjNmneHcDmanAF9nNBO0GA44g");
+        $telegram = new Api("339689903:AAGLaTBGlTQYOhmA0mt1CRof_EbGttBR86I");
         
         print_r($telegram->sendMessage([
-            'chat_id' => '-1001082111611@',
-            'text' => $message
+            'chat_id' => '198952866@',
+            'text' => json_encode($text)
         ]));
     }
     
