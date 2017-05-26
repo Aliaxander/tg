@@ -27,14 +27,17 @@ class WebhookController extends App
     public function get()
     {
         $text = $this->request->request->all();
-     
-        //chatId=132514008
+    /*
+     *
+     */
         $telegram = new Api("339689903:AAGLaTBGlTQYOhmA0mt1CRof_EbGttBR86I");
-        
+        $response = $telegram->getUpdates();
+        $response = $telegram->getMe();
         print_r($telegram->sendMessage([
-            'chat_id' => '198952866@',
-            'text' => json_encode($text)
+            'chat_id' => '132514008',
+            'text' => json_encode($response)
         ]));
+        
     }
     
     public function post()
