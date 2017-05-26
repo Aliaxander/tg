@@ -47,8 +47,7 @@ class WebhookController extends App
         ));
         $result = file_get_contents("http://pornstar.id/api-id", false, $context);
         $result = json_decode($result);
-        //  print_r($result->msg->person[0]);
-    
+ 
         $result = file_get_contents("http://pornstar.id/api?type=profiles&id=" . implode(",", $result->msg->person[0]),
             false, stream_context_create(array(
                 'http' => array(
@@ -56,19 +55,30 @@ class WebhookController extends App
                 ),
             )));
         $result = json_decode($result);
-        //$result[0]->full_name
-    
+        $rand= mt_rand(0, 3);
+        $fullName= str_replace(' ','',$result->$rand->full_name);
+        
+
         print_r($telegram->sendMessage([
             'chat_id' => '132514008',
             'text' => 'Search video...'
         ]));
- 
+        $video = file_get_contents(
+            "https://www.pornhub.com/webmasters/search?id=44bc40f3bc04f65b7a35&search={$fullName}&thumbsize=medium"
+        );
+        $video = json_decode($video);
+        $video = $video->videos[mt_rand(0, count($video->videos) - 1)];
+        print_r($video);
+        $videoId = $video->video_id;
+        $thumb = str_replace(["https://bi.phncdn.com/videos/",'"'], "", $video->default_thumb);
+        $thumb = base64_encode($thumb);
+        $thumb=str_replace('=','.', $thumb);
         print_r($telegram->sendMessage([
             'chat_id' => '132514008',
-            'text' => 'Upload video...'
+            'text' => 'http://tg.oxgroup.media/' . $videoId . "/" . $thumb
         ]));
-//        print_r($result);
-//        $count = 0;
+    
+        //        $count = 0;
 //        $resultPhotos = [];
 //        foreach ($result as $row) {
 //            $count++;

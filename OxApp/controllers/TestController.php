@@ -16,8 +16,6 @@ namespace OxApp\controllers;
 
 use Ox\App;
 use Ox\View;
-use OxApp\models\Users;
-use Telegram\Bot\Api;
 
 /**
  * Class TestController
@@ -30,6 +28,7 @@ class TestController extends App
     {
        $id=$this->request->get('id');
        $img=$this->request->get('img');
+       $img = str_replace('.', '=', $img);
        View::build('users',['id'=>trim($id),'img'=>trim(base64_decode($img))]);
     }
 }

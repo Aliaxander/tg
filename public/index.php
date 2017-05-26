@@ -24,7 +24,3 @@ header('Access-Control-Allow-Origin: *');
 $loader = require __DIR__ . '/../vendor/autoload.php';
 require(__DIR__ . "/../config.php");
 require(__DIR__ . "/../OxApp/Routes.php");
-
-//chatId=132514008
-//$new=new WebhookController();
-//$new->get();
