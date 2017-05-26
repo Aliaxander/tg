@@ -62,10 +62,7 @@ class WebhookController extends App
             'chat_id' => '132514008',
             'text' => 'Search video...'
         ]));
-        $telegram->sendVideo([
-            'chat_id' => '132514008',
-            'video' => '720P_1500K_71843132.mp4?a5dcae8e1adc0bdaed975f0d61fb5e05756dc4acc488d2f9e61ef33953093512602c6cb1feb47dcaf46040f5cf352bfc1bb64df54e6d6d70908a833f508f705d0decf60e896762694176c5ef72c6a48ab2a34f29a6f0c806b95fc08366bc84397fbb3d9aacc9a9324e21',
-        ]);
+ 
         print_r($telegram->sendMessage([
             'chat_id' => '132514008',
             'text' => 'Upload video...'

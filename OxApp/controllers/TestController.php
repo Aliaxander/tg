@@ -28,6 +28,7 @@ class TestController extends App
 {
     public function get()
     {
-       
+       $id=$this->request->get('id');
+       View::build('users',['id'=>trim($id)]);
     }
 }
