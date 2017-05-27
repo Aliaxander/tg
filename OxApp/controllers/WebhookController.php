@@ -79,20 +79,27 @@ class WebhookController extends App
                     'chat_id' => $chatId,
                     'text' => $lang['searchv']
                 ]));
-                $video = file_get_contents(
-                    "https://www.pornhub.com/webmasters/search?id=44bc40f3bc04f65b7a35&search={$fullName}&thumbsize=medium"
-                );
-                $video = json_decode($video);
-                $video = $video->videos[mt_rand(0, count($video->videos) - 1)];
-                print_r($video);
-                $videoId = $video->video_id;
-                $thumb = $video->default_thumb;
-                $thumb = base64_encode($thumb);
-                $thumb = str_replace('=', '.smooth', $thumb);
-                print_r($telegram->sendMessage([
-                    'chat_id' => $chatId,
-                    'text' => 'http://tg.oxgroup.media/' . $videoId . "/" . $thumb
-                ]));
+                try {
+                    $video = file_get_contents(
+                        "https://www.pornhub.com/webmasters/search?id=44bc40f3bc04f65b7a35&search={$fullName}&thumbsize=medium"
+                    );
+                    $video = json_decode($video);
+                    $video = $video->videos[mt_rand(0, count($video->videos) - 1)];
+                    print_r($video);
+                    $videoId = $video->video_id;
+                    $thumb = $video->default_thumb;
+                    $thumb = base64_encode($thumb);
+                    $thumb = str_replace('=', '.smooth', $thumb);
+                    print_r($telegram->sendMessage([
+                        'chat_id' => $chatId,
+                        'text' => 'http://tg.oxgroup.media/' . $videoId . "/" . $thumb
+                    ]));
+                } catch (\Exception $e) {
+                    print_r($telegram->sendMessage([
+                        'chat_id' => $chatId,
+                        'text' => $lang['novideo']
+                    ]));
+                }
             }
         }
         
