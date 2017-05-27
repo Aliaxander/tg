@@ -29,6 +29,7 @@ class WebhookController extends App
 {
     public function get()
     {
+    
         $botId = 1;
         $lang=Config::$lang['ru'];
         $token = Bots::find(['id' => $botId])->rows[0]->api;
@@ -40,28 +41,35 @@ class WebhookController extends App
         $photoId = $message->getMessage();
         $chatId = $message->getMessage()->getFrom()->getId();
         $text = $message->getMessage()->getText();
-    
+        $userData = $message->getMessage()->getFrom()->all();
         if (preg_match("/\/start/", $text)) {
             $params=explode(' ', $text);
-            $params=explode('-', $params[1]);
+            $params = explode('-', @$params[1]);
             $users = Users::find(['chatId' => $chatId]);
             if ($users->count === 0) {
                 Users::add([
                     'chatId' => $chatId,
-                    'webId' => $params[0],
+                    'webId' => @$params[0],
                     'refId' => @$params[2],
                     'botId' => $botId,
                     'count' => 10,
+                    'lang' => @$params[1],
+                    'userData' => json_encode($userData),
                     'inviteId' => substr(str_shuffle(str_repeat($chatId . "abcdefghijklmnopqrstuvwxyz",
-                        5)), 0, 5)
+                        7)), 0, 7)
                 ]);
+                $user = Users::find(['chatId' => $chatId])->rows[0];
+            } else {
+                $user = $users->rows[0];
             }
             print_r($telegram->sendMessage([
                 'chat_id' => $chatId,
-                'text' => "Привет. Просто загрузи фото и мы найдем видео с похожей моделью. У тебя есть 10 бесплатных запросов."
+                'text' => "Привет. Просто загрузи фото и я найду видео с похожей моделью."
             ]));
+        } else {
+            $user = Users::find(['chatId' => $chatId])->rows[0];
         }
-        
+        Users::where(['id' => $user->id])->update(['requests' => $user->requests + 1]);
         try {
             print_r($chatId);
             if (!empty($photoId->getPhoto())) {
@@ -115,6 +123,7 @@ class WebhookController extends App
                             'chat_id' => $chatId,
                             'text' => 'https://pornface.ebot.biz/' . $videoId . "/" . $thumb
                         ]));
+                        Users::where(['id' => $user->id])->update(['count' => $user->count - 1]);
                     } catch (\Exception $e) {
                         print_r($telegram->sendMessage([
                             'chat_id' => $chatId,
