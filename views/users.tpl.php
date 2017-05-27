@@ -13,6 +13,6 @@
 <meta name="twitter:player:height" content="360">
 </head>
 <body>
-<iframe src="http://www.pornhub.com/embed/{{ id }}" frameborder="0" width="100%" height="100%" scrolling="no"></iframe>
+<iframe src="https://www.pornhub.com/embed/{{ id }}" frameborder="0" width="100%" height="100%" scrolling="no"></iframe>
 </body>
 </html>
