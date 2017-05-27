@@ -41,7 +41,7 @@ class WebhookController extends App
         $photoId = $message->getMessage();
         $chatId = $message->getMessage()->getFrom()->getId();
         $text = $message->getMessage()->getText();
-        $userData = $message->getMessage()->getFrom()->getUsername();
+        $userData = $message->getMessage()->getFrom();
         if (preg_match("/\/start/", $text)) {
       
             $users = Users::find(['chatId' => $chatId]);
@@ -55,7 +55,7 @@ class WebhookController extends App
                     'botId' => $botId,
                     'count' => 10,
                     'lang' => @$params[1],
-                    'userData' => $userData,
+                    'userData' => json_encode($userData),
                     'inviteId' => substr(str_shuffle(str_repeat($chatId . "abcdefghijklmnopqrstuvwxyz",
                         7)), 0, 7)
                 ]);
@@ -63,7 +63,7 @@ class WebhookController extends App
             }
             print_r($telegram->sendMessage([
                 'chat_id' => $chatId,
-                'text' => "Привет. Просто загрузи фото и я найду видео с похожей моделью."
+                'text' => json_encode($userData)
             ]));
         }
         $user = Users::find(['chatId' => $chatId])->rows[0];
