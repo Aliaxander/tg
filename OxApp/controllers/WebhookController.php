@@ -45,7 +45,7 @@ class WebhookController extends App
         }*/
         print_r($telegram->sendMessage([
             'chat_id' => $chatId,
-            'text' => json_encode($message->getMessage())
+            'text' => $message->getMessage()->getText()
         ]));
         die();
         try {
