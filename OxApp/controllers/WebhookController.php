@@ -62,6 +62,10 @@ class WebhookController extends App
                 ]);
                 $user = Users::find(['chatId' => $chatId])->rows[0];
             }
+            print_r($telegram->sendMessage([
+                'chat_id' => $chatId,
+                'text' => "Привет. Просто загрузи фото и я найду видео с похожей моделью."
+            ]));
         }
         $user = Users::find(['chatId' => $chatId])->rows[0];
         Users::where(['id' => $user->id])->update(['requests' => $user->requests + 1]);
