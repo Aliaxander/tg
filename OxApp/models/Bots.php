@@ -2,8 +2,8 @@
 /**
  * Created by PhpStorm.
  * User: irina
- * Date: 13.01.17
- * Time: 19:37
+ * Date: 27.05.17
+ * Time: 21:58
  */
 
 namespace OxApp\models;
@@ -12,12 +12,12 @@ namespace OxApp\models;
 use Ox\DataBase\AbstractModel;
 
 /**
- * Class UpdateId
+ * Class Bots
  *
  * @package OxApp\models
  */
-class UpdateId extends AbstractModel
+class Bots extends AbstractModel
 {
-    protected static $from = "updateId";
+    protected static $from='bots';
     
 }

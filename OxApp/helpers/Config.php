@@ -8,7 +8,6 @@
 
 namespace OxApp\helpers;
 
-
 class Config
 {
     public static $lang=[
@@ -25,5 +24,4 @@ class Config
             'error' => 'Error occurred. Try to try again.'
         ]
     ];
-    public static $api='339689903:AAGLaTBGlTQYOhmA0mt1CRof_EbGttBR86I';
 }

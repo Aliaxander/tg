@@ -16,6 +16,8 @@ namespace OxApp\controllers;
 
 use Ox\App;
 use OxApp\helpers\Config;
+use OxApp\models\Bots;
+use OxApp\models\Users;
 use Telegram\Bot\Api;
 
 /**
@@ -28,7 +30,7 @@ class WebhookController extends App
     public function get()
     {
         $lang=Config::$lang['ru'];
-        $token = Config::$api;
+        $token = Bots::find(['id' => 1])->rows[0]->api;
         $telegram = new Api($token);
       //  print_r($telegram->setWebhook(['url'=>'https://tg.oxgroup.media']));
     
@@ -36,6 +38,16 @@ class WebhookController extends App
     
         $photoId = $message->getMessage();
         $chatId = $message->getMessage()->getFrom()->getId();
+      /*
+        $users=Users::find(['chatId'=> $chatId]);
+        if($users->count===0){
+            Users::add()
+        }*/
+        print_r($telegram->sendMessage([
+            'chat_id' => $chatId,
+            'text' => json_encode($message->getMessage())
+        ]));
+        die();
         try {
             print_r($chatId);
             if (!empty($photoId->getPhoto())) {
