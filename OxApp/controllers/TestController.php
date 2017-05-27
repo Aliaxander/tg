@@ -26,7 +26,6 @@ class TestController extends App
 {
     public function get()
     {
-        echo 'ok';
        $id=$this->request->get('id');
        $img=$this->request->get('img');
        $img = str_replace('.smooth', '=', $img);
