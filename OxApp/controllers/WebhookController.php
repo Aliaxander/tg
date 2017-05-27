@@ -104,7 +104,7 @@ class WebhookController extends App
                             ),
                         )));
                     $result = json_decode($result);
-                    $rand = mt_rand(0, 0);
+                    $rand = mt_rand(0, 1);
                     $fullName = str_replace(' ', '', $result->$rand->full_name);
                     
                     try {
