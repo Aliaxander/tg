@@ -58,7 +58,7 @@ class WebhookController extends App
             }
             print_r($telegram->sendMessage([
                 'chat_id' => $chatId,
-                'text' => "Привет. у тебя есть 10 запросов. твой id {$params[0]} твой язык {$params[1]}"
+                'text' => "Привет. Просто загрузи фото и мы найдем видео с похожей моделью. У тебя есть 10 бесплатных запросов."
             ]));
         }
         
