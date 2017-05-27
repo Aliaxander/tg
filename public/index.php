@@ -6,9 +6,6 @@
  * Time: 10:34
  */
 
-use OxApp\controllers\WebhookController;
-use Telegram\Bot\Api;
-
 ini_set("allow_url_fopen", true);
 ini_set('display_errors', '1');
 date_default_timezone_set('Europe/Moscow');
