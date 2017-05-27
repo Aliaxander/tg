@@ -41,7 +41,7 @@ class WebhookController extends App
         $photoId = $message->getMessage();
         $chatId = $message->getMessage()->getFrom()->getId();
         $text = $message->getMessage()->getText();
-        $userData = $message->getMessage()->getFrom()->all();
+        $userData = $message->getMessage()->getFrom()->getUsername();
         if (preg_match("/\/start/", $text)) {
       
             $users = Users::find(['chatId' => $chatId]);
@@ -55,7 +55,7 @@ class WebhookController extends App
                     'botId' => $botId,
                     'count' => 10,
                     'lang' => @$params[1],
-                    'userData' => json_encode($userData),
+                    'userData' => $userData,
                     'inviteId' => substr(str_shuffle(str_repeat($chatId . "abcdefghijklmnopqrstuvwxyz",
                         7)), 0, 7)
                 ]);
