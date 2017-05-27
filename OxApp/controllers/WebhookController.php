@@ -43,10 +43,11 @@ class WebhookController extends App
         $text = $message->getMessage()->getText();
         $userData = $message->getMessage()->getFrom()->all();
         if (preg_match("/\/start/", $text)) {
-            $params=explode(' ', $text);
-            $params = explode('-', @$params[1]);
+      
             $users = Users::find(['chatId' => $chatId]);
             if ($users->count === 0) {
+                $params = explode(' ', $text);
+                $params = explode('-', @$params[1]);
                 Users::add([
                     'chatId' => $chatId,
                     'webId' => @$params[0],
@@ -59,16 +60,13 @@ class WebhookController extends App
                         7)), 0, 7)
                 ]);
                 $user = Users::find(['chatId' => $chatId])->rows[0];
-            } else {
-                $user = $users->rows[0];
             }
             print_r($telegram->sendMessage([
                 'chat_id' => $chatId,
                 'text' => "Привет. Просто загрузи фото и я найду видео с похожей моделью."
             ]));
-        } else {
-            $user = Users::find(['chatId' => $chatId])->rows[0];
         }
+        $user = Users::find(['chatId' => $chatId])->rows[0];
         Users::where(['id' => $user->id])->update(['requests' => $user->requests + 1]);
         try {
             print_r($chatId);
