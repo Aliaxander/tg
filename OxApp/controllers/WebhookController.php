@@ -44,13 +44,15 @@ class WebhookController extends App
         }*/
         $text = $message->getMessage()->getText();
         if (preg_match("/\/start/", $text)) {
+            $params=explode(' ', $text);
+            $params=explode('-', $params[1]);
+            
             print_r($telegram->sendMessage([
                 'chat_id' => $chatId,
-                'text' => "start"
+                'text' => "Привет. у тебя есть 10 запросов. твой id {$params[0]} твой язык {$params[1]}"
             ]));
         }
-       
-        die();
+        
         try {
             print_r($chatId);
             if (!empty($photoId->getPhoto())) {
