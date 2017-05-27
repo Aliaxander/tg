@@ -28,7 +28,7 @@ class TestController extends App
     {
        $id=$this->request->get('id');
        $img=$this->request->get('img');
-       $img = str_replace('.', '=', $img);
+       $img = str_replace('.smooth', '=', $img);
        View::build('users',['id'=>trim($id),'img'=>trim(base64_decode($img))]);
     }
 }

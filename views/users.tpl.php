@@ -7,7 +7,7 @@
     }
 </style>
     <meta name="twitter:card" content="player">
-<meta name="twitter:image" content="https://bi.phncdn.com/videos/{{ img }}">
+<meta name="twitter:image" content="{{ img }}">
     <meta name="twitter:player" content="https://www.pornhub.com/embed/{{ id }}">
 <meta name="twitter:player:width" content="640">
 <meta name="twitter:player:height" content="360">
