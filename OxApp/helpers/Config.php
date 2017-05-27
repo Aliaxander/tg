@@ -13,16 +13,16 @@ class Config
 {
     public static $lang=[
         'ru'=>[
-            'searchw' => 'Ищу девушку...',
-            'searchv' => 'Ищу видео...',
+            'searchw' => 'Ищу модель...',
             'noface'=>'Не нашел лиц на фото.',
-            'novideo'=>'Не нашел видео или произошла ошибка, попробуйте позже.'
+            'novideo'=>'Не нашел видео или произошла ошибка, попробуйте позже.',
+            'error'=>'Произошла ошибка. Попробуйте повторить попытку.'
         ],
         'en'=>[
-            'searchw' => 'Finding a girl...',
-            'searchv' => 'Search Videos...',
+            'searchw' => 'Finding a model...',
             'noface' => 'Did not find the faces in the photo.',
-            'novideo' => 'Did not find the video or an error occurred, please try again later.'
+            'novideo' => 'Did not find the video or an error occurred, please try again later.',
+            'error' => 'Error occurred. Try to try again.'
         ]
     ];
     public static $api='339689903:AAGLaTBGlTQYOhmA0mt1CRof_EbGttBR86I';
