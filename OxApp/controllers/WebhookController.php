@@ -17,6 +17,7 @@ namespace OxApp\controllers;
 use Ox\App;
 use OxApp\helpers\Config;
 use OxApp\models\Bots;
+use OxApp\models\Requests;
 use OxApp\models\Users;
 use Telegram\Bot\Api;
 
@@ -75,7 +76,7 @@ class WebhookController extends App
                 $fileId = $photo[3]['file_id'];
                 $response = $telegram->getFile(['file_id' => $fileId]);
                 $file = "https://api.telegram.org/file/bot$token/" . $response->getFilePath();
-                //
+                Requests::add(['user' => $user->id, 'photo' => $file]);
                 $context = stream_context_create(array(
                     'http' => array(
                         'method' => 'POST',
