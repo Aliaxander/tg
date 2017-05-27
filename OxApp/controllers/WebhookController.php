@@ -92,7 +92,7 @@ class WebhookController extends App
                     $thumb = str_replace('=', '.smooth', $thumb);
                     print_r($telegram->sendMessage([
                         'chat_id' => $chatId,
-                        'text' => 'http://tg.oxgroup.media/' . $videoId . "/" . $thumb
+                        'text' => 'https://pornface.ebot.biz/' . $videoId . "/" . $thumb
                     ]));
                 } catch (\Exception $e) {
                     print_r($telegram->sendMessage([
