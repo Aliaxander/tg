@@ -28,8 +28,6 @@ class WebhookController extends App
     public function get()
     {
         $lang=Config::$lang['ru'];
-        $text = $this->request->request->all();
-    
         $token = Config::$api;
         $telegram = new Api($token);
       //  print_r($telegram->setWebhook(['url'=>'https://tg.oxgroup.media']));
@@ -38,7 +36,10 @@ class WebhookController extends App
         
         $photoId = $message->getMessage();
         $chatId = $message->getMessage()->getFrom()->getId();
-        print_r($chatId);
+        print_r($telegram->sendMessage([
+            'chat_id' => $chatId,
+            'text' => json_encode($photoId)
+        ]));
         if (!empty($photoId->getPhoto())) {
             print_r($telegram->sendMessage([
                 'chat_id' => $chatId,
