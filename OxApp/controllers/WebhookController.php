@@ -36,10 +36,8 @@ class WebhookController extends App
         
         $photoId = $message->getMessage();
         $chatId = $message->getMessage()->getFrom()->getId();
-        print_r($telegram->sendMessage([
-            'chat_id' => $chatId,
-            'text' => json_encode($photoId)
-        ]));
+        
+        print_r($chatId);
         if (!empty($photoId->getPhoto())) {
             print_r($telegram->sendMessage([
                 'chat_id' => $chatId,
