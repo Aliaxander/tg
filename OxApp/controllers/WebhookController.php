@@ -17,6 +17,7 @@ namespace OxApp\controllers;
 use Ox\App;
 use OxApp\helpers\Config;
 use OxApp\models\Bots;
+use OxApp\models\Users;
 use Telegram\Bot\Api;
 
 /**
@@ -28,8 +29,9 @@ class WebhookController extends App
 {
     public function get()
     {
+        $botId = 1;
         $lang=Config::$lang['ru'];
-        $token = Bots::find(['id' => 1])->rows[0]->api;
+        $token = Bots::find(['id' => $botId])->rows[0]->api;
         $telegram = new Api($token);
       //  print_r($telegram->setWebhook(['url'=>'https://tg.oxgroup.media']));
     
@@ -37,16 +39,23 @@ class WebhookController extends App
     
         $photoId = $message->getMessage();
         $chatId = $message->getMessage()->getFrom()->getId();
-      /*
-        $users=Users::find(['chatId'=> $chatId]);
-        if($users->count===0){
-            Users::add()
-        }*/
         $text = $message->getMessage()->getText();
+    
         if (preg_match("/\/start/", $text)) {
             $params=explode(' ', $text);
             $params=explode('-', $params[1]);
-            
+            $users = Users::find(['chatId' => $chatId]);
+            if ($users->count === 0) {
+                Users::add([
+                    'chatId' => $chatId,
+                    'webId' => $params[0],
+                    'refId' => @$params[2],
+                    'botId' => $botId,
+                    'count' => 10,
+                    'inviteId' => substr(str_shuffle(str_repeat($chatId . "abcdefghijklmnopqrstuvwxyz",
+                        5)), 0, 5)
+                ]);
+            }
             print_r($telegram->sendMessage([
                 'chat_id' => $chatId,
                 'text' => "Привет. у тебя есть 10 запросов. твой id {$params[0]} твой язык {$params[1]}"
