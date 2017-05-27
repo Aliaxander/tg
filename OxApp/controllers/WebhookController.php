@@ -17,7 +17,6 @@ namespace OxApp\controllers;
 use Ox\App;
 use OxApp\helpers\Config;
 use OxApp\models\Bots;
-use OxApp\models\Users;
 use Telegram\Bot\Api;
 
 /**
@@ -43,10 +42,14 @@ class WebhookController extends App
         if($users->count===0){
             Users::add()
         }*/
-        print_r($telegram->sendMessage([
-            'chat_id' => $chatId,
-            'text' => $message->getMessage()->getText()
-        ]));
+        $text = $message->getMessage()->getText();
+        if (preg_match("/\/start/", $text)) {
+            print_r($telegram->sendMessage([
+                'chat_id' => $chatId,
+                'text' => "start"
+            ]));
+        }
+       
         die();
         try {
             print_r($chatId);
