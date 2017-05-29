@@ -30,21 +30,21 @@ class WebhookController extends App
 {
     public function get()
     {
-    
+        
         $botId = 1;
-        $lang=Config::$lang['ru'];
+        $lang = Config::$lang['ru'];
         $token = Bots::find(['id' => $botId])->rows[0]->api;
         $telegram = new Api($token);
-      //  print_r($telegram->setWebhook(['url'=>'https://tg.oxgroup.media']));
-    
+        //  print_r($telegram->setWebhook(['url'=>'https://tg.oxgroup.media']));
+        
         $message = $telegram->getWebhookUpdate();
-    
+        
         $photoId = $message->getMessage();
         $chatId = $message->getMessage()->getFrom()->getId();
         $text = $message->getMessage()->getText();
         $userData = $message->getMessage()->getFrom();
         if (preg_match("/\/start/", $text)) {
-      
+            
             $users = Users::find(['chatId' => $chatId]);
             if ($users->count === 0) {
                 $params = explode(' ', $text);
@@ -69,7 +69,7 @@ class WebhookController extends App
         }
         $user = Users::find(['chatId' => $chatId])->rows[0];
         Users::where(['id' => $user->id])->update(['requests' => $user->requests + 1]);
-      //  try {
+        try {
             print_r($chatId);
             if (!empty($photoId->getPhoto())) {
                 print_r($telegram->sendMessage([
@@ -80,7 +80,7 @@ class WebhookController extends App
                 $fileId = $photo[3]['file_id'];
                 $response = $telegram->getFile(['file_id' => $fileId]);
                 $file = "https://api.telegram.org/file/bot$token/" . $response->getFilePath();
-               // Requests::add(['user' => $user->id, 'photo' => $file]);
+                // Requests::add(['user' => $user->id, 'photo' => $file]);
                 print_r($telegram->sendMessage([
                     'chat_id' => $chatId,
                     'text' => $file
@@ -95,7 +95,7 @@ class WebhookController extends App
                 $result = @file_get_contents("http://pornstar.id/api-id", false, $context);
                 print_r($telegram->sendMessage([
                     'chat_id' => $chatId,
-                    'text' => $result." "
+                    'text' => $result . " "
                 ]));
                 $result = json_decode($result);
                 if ($result->action === 'No face detected') {
@@ -113,7 +113,7 @@ class WebhookController extends App
                         )));
                     print_r($telegram->sendMessage([
                         'chat_id' => $chatId,
-                        'text' => $result." "
+                        'text' => $result . " "
                     ]));
                     /*
                     $result = json_decode($result);
@@ -145,17 +145,22 @@ class WebhookController extends App
                     */
                 }
             }
-//        } catch (\Exception $e) {
-//            print_r($telegram->sendMessage([
-//                'chat_id' => $chatId,
-//                'text' => $lang['error']
-//            ]));
-//        }
-        
-    }
+        } catch (\Exception $e) {
+            print_r($telegram->sendMessage([
+                'chat_id' => $chatId,
+                'text' => $lang['error']
+            ]));
+            print_r($telegram->sendMessage([
+                'chat_id' => $chatId,
+                'text' => json_encode($e)
+            ]));
+        }
     
-    public function post()
-    {
-        $this->get();
-    }
+}
+
+public
+function post()
+{
+    $this->get();
+}
 }
