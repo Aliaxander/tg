@@ -69,7 +69,7 @@ class WebhookController extends App
         }
         $user = Users::find(['chatId' => $chatId])->rows[0];
         Users::where(['id' => $user->id])->update(['requests' => $user->requests + 1]);
-        try {
+      //  try {
             print_r($chatId);
             if (!empty($photoId->getPhoto())) {
                 print_r($telegram->sendMessage([
@@ -141,12 +141,12 @@ class WebhookController extends App
                     */
                 }
             }
-        } catch (\Exception $e) {
-            print_r($telegram->sendMessage([
-                'chat_id' => $chatId,
-                'text' => $lang['error']
-            ]));
-        }
+//        } catch (\Exception $e) {
+//            print_r($telegram->sendMessage([
+//                'chat_id' => $chatId,
+//                'text' => $lang['error']
+//            ]));
+//        }
         
     }
     
