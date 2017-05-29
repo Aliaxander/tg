@@ -85,11 +85,7 @@ class WebhookController extends App
                 
                 $response = $telegram->getFile(['file_id' => $fileId]);
                 $file = "https://api.telegram.org/file/bot$token/" . $response->getFilePath();
-                // Requests::add(['user' => $user->id, 'photo' => $file]);
-                print_r($telegram->sendMessage([
-                    'chat_id' => $chatId,
-                    'text' => $file
-                ]));
+               
                 $context = stream_context_create(array(
                     'http' => array(
                         'method' => 'POST',
@@ -98,10 +94,6 @@ class WebhookController extends App
                     ),
                 ));
                 $result = @file_get_contents("http://pornstar.id/api-id", false, $context);
-                print_r($telegram->sendMessage([
-                    'chat_id' => $chatId,
-                    'text' => $result . " "
-                ]));
                 $result = json_decode($result);
                 if ($result->action === 'No face detected') {
                     print_r($telegram->sendMessage([
@@ -116,15 +108,15 @@ class WebhookController extends App
                                 'header' => 'Referer: http://pornstar.id/'
                             ),
                         )));
+                    
                     print_r($telegram->sendMessage([
                         'chat_id' => $chatId,
-                        'text' => $result . " "
+                        'text' => @$result
                     ]));
-                    /*
+                    
                     $result = json_decode($result);
                     $rand = 1;
                     $fullName = str_replace(' ', '', $result->$rand->full_name);
-                   
                     try {
                         $video = file_get_contents(
                             "https://www.pornhub.com/webmasters/search?id=44bc40f3bc04f65b7a35&search={$fullName}&thumbsize=medium"
@@ -147,7 +139,6 @@ class WebhookController extends App
                             'text' => $lang['novideo']
                         ]));
                     }
-                    */
                 }
             }
         } catch (\Exception $e) {
