@@ -77,7 +77,12 @@ class WebhookController extends App
                     'text' => $lang['searchw']
                 ]));
                 $photo = $photoId->getPhoto();
-                $fileId = $photo[3]['file_id'];
+                if(isset($photo[3]['file_id'])){
+                    $fileId = $photo[3]['file_id'];
+                }else{
+                    $fileId = $photo[2]['file_id'];
+                }
+                
                 $response = $telegram->getFile(['file_id' => $fileId]);
                 $file = "https://api.telegram.org/file/bot$token/" . $response->getFilePath();
                 // Requests::add(['user' => $user->id, 'photo' => $file]);
