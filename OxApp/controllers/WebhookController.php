@@ -108,7 +108,7 @@ class WebhookController extends App
                     $fullName = str_replace(' ', '', $result->$rand->full_name);
                     print_r($telegram->sendMessage([
                         'chat_id' => $chatId,
-                        'text' => $fullName
+                        'text' => json_encode($result)
                     ]));
                     try {
                         $video = file_get_contents(
