@@ -106,7 +106,10 @@ class WebhookController extends App
                     $result = json_decode($result);
                     $rand = 1;
                     $fullName = str_replace(' ', '', $result->$rand->full_name);
-                    
+                    print_r($telegram->sendMessage([
+                        'chat_id' => $chatId,
+                        'text' => $fullName
+                    ]));
                     try {
                         $video = file_get_contents(
                             "https://www.pornhub.com/webmasters/search?id=44bc40f3bc04f65b7a35&search={$fullName}&thumbsize=medium"
