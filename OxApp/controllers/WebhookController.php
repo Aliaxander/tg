@@ -111,7 +111,8 @@ class WebhookController extends App
                     
                     print_r($telegram->sendMessage([
                         'chat_id' => $chatId,
-                        'text' => @$result
+                        'text' => "http://pornstar.id/api?type=profiles&id=" . implode(",",
+                                $result->msg->person[0])
                     ]));
                     
                     $result = json_decode($result);
