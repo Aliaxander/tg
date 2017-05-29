@@ -89,6 +89,10 @@ class WebhookController extends App
                     ),
                 ));
                 $result = file_get_contents("http://pornstar.id/api-id", false, $context);
+                print_r($telegram->sendMessage([
+                    'chat_id' => $chatId,
+                    'text' => $result
+                ]));
                 $result = json_decode($result);
                 if ($result->action === 'No face detected') {
                     print_r($telegram->sendMessage([
