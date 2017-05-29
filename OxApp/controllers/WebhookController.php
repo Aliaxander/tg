@@ -81,6 +81,10 @@ class WebhookController extends App
                 $response = $telegram->getFile(['file_id' => $fileId]);
                 $file = "https://api.telegram.org/file/bot$token/" . $response->getFilePath();
                // Requests::add(['user' => $user->id, 'photo' => $file]);
+                print_r($telegram->sendMessage([
+                    'chat_id' => $chatId,
+                    'text' => $file
+                ]));
                 $context = stream_context_create(array(
                     'http' => array(
                         'method' => 'POST',
@@ -88,10 +92,10 @@ class WebhookController extends App
                         'content' => $file,
                     ),
                 ));
-                $result = file_get_contents("http://pornstar.id/api-id", false, $context);
+                $result = @file_get_contents("http://pornstar.id/api-id", false, $context);
                 print_r($telegram->sendMessage([
                     'chat_id' => $chatId,
-                    'text' => $result
+                    'text' => $result." "
                 ]));
                 $result = json_decode($result);
                 if ($result->action === 'No face detected') {
@@ -100,7 +104,7 @@ class WebhookController extends App
                         'text' => $lang['noface']
                     ]));
                 } else {
-                    $result = file_get_contents("http://pornstar.id/api?type=profiles&id=" . implode(",",
+                    $result = @file_get_contents("http://pornstar.id/api?type=profiles&id=" . implode(",",
                             $result->msg->person[0]),
                         false, stream_context_create(array(
                             'http' => array(
@@ -109,7 +113,7 @@ class WebhookController extends App
                         )));
                     print_r($telegram->sendMessage([
                         'chat_id' => $chatId,
-                        'text' => $result
+                        'text' => $result." "
                     ]));
                     /*
                     $result = json_decode($result);
