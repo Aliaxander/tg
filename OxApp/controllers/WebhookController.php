@@ -94,7 +94,7 @@ class WebhookController extends App
                     ),
                 ));
                 $result = @file_get_contents("http://pornstar.id/api-id", false, $context);
-                $result = json_decode($result);
+                $result = @json_decode($result);
                 if ($result->action === 'No face detected') {
                     print_r($telegram->sendMessage([
                         'chat_id' => $chatId,
@@ -108,16 +108,14 @@ class WebhookController extends App
                                 'header' => 'Referer: http://pornstar.id/'
                             ),
                         )));
-                    
-                    print_r($telegram->sendMessage([
-                        'chat_id' => $chatId,
-                        'text' => "http://pornstar.id/api?type=profiles&id=" . implode(",",
-                                $result->msg->person[0])
-                    ]));
-                    
                     $result = json_decode($result);
                     $rand = 1;
-                    $fullName = str_replace(' ', '', $result->$rand->full_name);
+                    $name=end($result)->full_name;
+                    print_r($telegram->sendMessage([
+                        'chat_id' => $chatId,
+                        'text' => $name
+                    ]));
+                    $fullName = str_replace(' ', '', $name);
                     try {
                         $video = file_get_contents(
                             "https://www.pornhub.com/webmasters/search?id=44bc40f3bc04f65b7a35&search={$fullName}&thumbsize=medium"
