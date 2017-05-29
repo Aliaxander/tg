@@ -146,14 +146,13 @@ class WebhookController extends App
                 }
             }
         } catch (\Exception $e) {
+          
             print_r($telegram->sendMessage([
                 'chat_id' => $chatId,
                 'text' => $lang['error']
             ]));
-            print_r($telegram->sendMessage([
-                'chat_id' => $chatId,
-                'text' => json_encode($e)
-            ]));
+     
+            throw new \Exception($e);
         }
     
 }
