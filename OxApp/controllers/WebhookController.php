@@ -108,8 +108,13 @@ class WebhookController extends App
                                 'header' => 'Referer: http://pornstar.id/'
                             ),
                         )));
+                    print_r($telegram->sendMessage([
+                        'chat_id' => $chatId,
+                        'text' => $result
+                    ]));
                     $result = json_decode($result);
                     $rand = 1;
+                   
                     $name = end($result)->full_name;
                     print_r($telegram->sendMessage([
                         'chat_id' => $chatId,
