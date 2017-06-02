@@ -77,15 +77,15 @@ class WebhookController extends App
                     'text' => $lang['searchw']
                 ]));
                 $photo = $photoId->getPhoto();
-                if(isset($photo[3]['file_id'])){
+                if (isset($photo[3]['file_id'])) {
                     $fileId = $photo[3]['file_id'];
-                }else{
+                } else {
                     $fileId = $photo[2]['file_id'];
                 }
                 
                 $response = $telegram->getFile(['file_id' => $fileId]);
                 $file = "https://api.telegram.org/file/bot$token/" . $response->getFilePath();
-               
+                
                 $context = stream_context_create(array(
                     'http' => array(
                         'method' => 'POST',
@@ -110,7 +110,7 @@ class WebhookController extends App
                         )));
                     $result = json_decode($result);
                     $rand = 1;
-                    $name=end($result)->full_name;
+                    $name = end($result)->full_name;
                     print_r($telegram->sendMessage([
                         'chat_id' => $chatId,
                         'text' => $name
@@ -141,20 +141,19 @@ class WebhookController extends App
                 }
             }
         } catch (\Exception $e) {
-          
+            
             print_r($telegram->sendMessage([
                 'chat_id' => $chatId,
                 'text' => $lang['error']
             ]));
-     
+            
             throw new \Exception($e);
         }
+        
+    }
     
-}
-
-public
-function post()
-{
-    $this->get();
-}
+    public function post()
+    {
+        $this->get();
+    }
 }
