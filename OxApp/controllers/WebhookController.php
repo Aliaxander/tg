@@ -123,9 +123,9 @@ class WebhookController extends App
                         $video = json_decode($video);
                         $video = $video->videos[mt_rand(0, count($video->videos) - 1)];
                         print_r($video);
-                        $videoId = $video->video_id;
-                        $thumb = $video->default_thumb;
-                        $thumb = base64_encode($thumb);
+                        $videoId = @$video->video_id;
+                        $thumb = @$video->default_thumb;
+                        $thumb = @base64_encode($thumb);
                         $thumb = str_replace('=', '.smooth', $thumb);
                         print_r($telegram->sendMessage([
                             'chat_id' => $chatId,
