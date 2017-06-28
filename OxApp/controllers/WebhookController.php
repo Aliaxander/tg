@@ -113,7 +113,7 @@ class WebhookController extends App
                 if (empty($result)) {
                     print_r($telegram->sendMessage([
                         'chat_id' => $chatId,
-                        'text' => $lang['noface']
+                        'text' => $lang['noface']. $file
                     ]));
                 } else {
                     
