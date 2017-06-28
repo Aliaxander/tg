@@ -89,7 +89,7 @@ class WebhookController extends App
                 
                 //                $cfile = ;
                 
-                $post = array('picture' => new \CURLFile(realpath($file)));
+                $post = array('picture' => file_get_contents($file));
                 
                 $ch = curl_init();
                 curl_setopt($ch, CURLOPT_URL, $target_url);
