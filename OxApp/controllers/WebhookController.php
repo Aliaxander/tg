@@ -83,15 +83,13 @@ class WebhookController extends App
                 
                 $response = $telegram->getFile(['file_id' => $fileId]);
                 $file = "https://api.telegram.org/file/bot$token/" . $response->getFilePath();
+                
                 $tmpName = time();
                 file_put_contents(__DIR__ . '/../../tmp/' . $tmpName, file_get_contents($file));
-                
                 $target_url = "https://api.findxfiles.com/faces/process/file";
-                
-                //                $cfile = ;
-                
+    
                 $post = array('picture' => new \CURLFile(realpath(__DIR__ . '/../../tmp/' . $tmpName)));
-                unlink(__DIR__ . '/../../tmp/' . $tmpName);
+                //unlink(__DIR__ . '/../../tmp/' . $tmpName);
                 
                 $ch = curl_init();
                 curl_setopt($ch, CURLOPT_URL, $target_url);
@@ -118,7 +116,6 @@ class WebhookController extends App
                         'text' => $lang['noface'] . $file
                     ]));
                 } else {
-                    
                     foreach ($result as $row) {
                         $rate = round($row->confidence * 1000);
                         $resultPic[$rate] = $row->name;
