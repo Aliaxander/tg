@@ -87,9 +87,9 @@ class WebhookController extends App
                 
                 $target_url = "https://api.findxfiles.com/faces/process/file";
                 
-                //                $cfile = new CURLFile(realpath('photo_2017-05-29_15-28-30.jpg'));
+                //                $cfile = ;
                 
-                $post = array('picture' => $file);
+                $post = array('picture' => new \CURLFile(realpath($file)));
                 
                 $ch = curl_init();
                 curl_setopt($ch, CURLOPT_URL, $target_url);
