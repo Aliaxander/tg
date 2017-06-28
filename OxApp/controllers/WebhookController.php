@@ -30,7 +30,6 @@ class WebhookController extends App
 {
     public function get()
     {
-        
         $botId = 1;
         $lang = Config::$lang['ru'];
         $token = Bots::find(['id' => $botId])->rows[0]->api;
@@ -44,7 +43,6 @@ class WebhookController extends App
         $text = $message->getMessage()->getText();
         $userData = $message->getMessage()->getFrom();
         if (preg_match("/\/start/", $text)) {
-            
             $users = Users::find(['chatId' => $chatId]);
             if ($users->count === 0) {
                 $params = explode(' ', $text);
@@ -86,36 +84,47 @@ class WebhookController extends App
                 $response = $telegram->getFile(['file_id' => $fileId]);
                 $file = "https://api.telegram.org/file/bot$token/" . $response->getFilePath();
                 
-                $context = stream_context_create(array(
-                    'http' => array(
-                        'method' => 'POST',
-                        'header' => 'Referer: http://pornstar.id/' . "\n" . 'Content-Type: application/x-www-form-urlencoded' . PHP_EOL,
-                        'content' => $file,
-                    ),
-                ));
-                $result = @file_get_contents("http://pornstar.id/api-id", false, $context);
+                
+                $target_url = "https://api.findxfiles.com/faces/process/file";
+                
+                //                $cfile = new CURLFile(realpath('photo_2017-05-29_15-28-30.jpg'));
+                
+                $post = array('picture' => $file);
+                
+                $ch = curl_init();
+                curl_setopt($ch, CURLOPT_URL, $target_url);
+                curl_setopt($ch, CURLOPT_POST, 1);
+                curl_setopt($ch, CURLOPT_HEADER, 0);
+                curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+                curl_setopt($ch, CURLOPT_USERAGENT,
+                    "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.12; rv:55.0) Gecko/20100101 Firefox/55.0");
+                curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: multipart/form-data'));
+                curl_setopt($ch, CURLOPT_REFERER, 'https://findxfiles.com/');
+                curl_setopt($ch, CURLOPT_FRESH_CONNECT, 1);
+                curl_setopt($ch, CURLOPT_FORBID_REUSE, 1);
+                curl_setopt($ch, CURLOPT_TIMEOUT, 100);
+                curl_setopt($ch, CURLOPT_POSTFIELDS, $post);
+                
+                $result = curl_exec($ch);
+                
                 $result = @json_decode($result);
-                if ($result->action === 'No face detected') {
+                //print_r($result);
+                $resultPic = [];
+                if (empty($result)) {
                     print_r($telegram->sendMessage([
                         'chat_id' => $chatId,
                         'text' => $lang['noface']
                     ]));
                 } else {
-                    $result = @file_get_contents("http://pornstar.id/api?type=profiles&id=" . implode(",",
-                            $result->msg->person[0]),
-                        false, stream_context_create(array(
-                            'http' => array(
-                                'header' => 'Referer: http://pornstar.id/'
-                            ),
-                        )));
-                    print_r($telegram->sendMessage([
-                        'chat_id' => $chatId,
-                        'text' => $result
-                    ]));
-                    $result = json_decode($result);
-                    $rand = 1;
-                   
-                    $name = end($result)->full_name;
+                    
+                    foreach ($result as $row) {
+                        $rate = round($row->confidence * 1000);
+                        $resultPic[$rate] = $row->name;
+                    }
+                    
+                    krsort($resultPic);
+                    $resultPic = array_values($resultPic);
+                    $name = $resultPic[0];
                     print_r($telegram->sendMessage([
                         'chat_id' => $chatId,
                         'text' => $name
@@ -146,7 +155,6 @@ class WebhookController extends App
                 }
             }
         } catch (\Exception $e) {
-            
             print_r($telegram->sendMessage([
                 'chat_id' => $chatId,
                 'text' => $lang['error']
@@ -154,7 +162,6 @@ class WebhookController extends App
             
             throw new \Exception($e);
         }
-        
     }
     
     public function post()
