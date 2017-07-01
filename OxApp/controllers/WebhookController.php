@@ -149,7 +149,7 @@ class WebhookController extends App
                     } catch (\Exception $e) {
                         print_r($telegram->sendMessage([
                             'chat_id' => $chatId,
-                            'text' => $e->getMessage()
+                            'text' => json_encode($video)."-".$e->getMessage()
                         ]));
                     }
                 }
