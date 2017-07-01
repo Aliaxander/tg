@@ -30,21 +30,19 @@ class WebhookController extends App
 {
     public function get()
     {
-    
         $botId = 1;
-        $lang=Config::$lang['ru'];
+        $lang = Config::$lang['ru'];
         $token = Bots::find(['id' => $botId])->rows[0]->api;
         $telegram = new Api($token);
-      //  print_r($telegram->setWebhook(['url'=>'https://tg.oxgroup.media']));
-    
+        //  print_r($telegram->setWebhook(['url'=>'https://tg.oxgroup.media']));
+        
         $message = $telegram->getWebhookUpdate();
-    
+        
         $photoId = $message->getMessage();
         $chatId = $message->getMessage()->getFrom()->getId();
         $text = $message->getMessage()->getText();
         $userData = $message->getMessage()->getFrom();
         if (preg_match("/\/start/", $text)) {
-      
             $users = Users::find(['chatId' => $chatId]);
             if ($users->count === 0) {
                 $params = explode(' ', $text);
@@ -78,36 +76,60 @@ class WebhookController extends App
                     'text' => $lang['searchw']
                 ]));
                 $photo = $photoId->getPhoto();
-                $fileId = $photo[3]['file_id'];
+                if (isset($photo[3]['file_id'])) {
+                    $fileId = $photo[3]['file_id'];
+                } else {
+                    $fileId = $photo[2]['file_id'];
+                }
+                
                 $response = $telegram->getFile(['file_id' => $fileId]);
                 $file = "https://api.telegram.org/file/bot$token/" . $response->getFilePath();
-               // Requests::add(['user' => $user->id, 'photo' => $file]);
-                $context = stream_context_create(array(
-                    'http' => array(
-                        'method' => 'POST',
-                        'header' => 'Referer: http://pornstar.id/' . "\n" . 'Content-Type: application/x-www-form-urlencoded' . PHP_EOL,
-                        'content' => $file,
-                    ),
-                ));
-                $result = file_get_contents("http://pornstar.id/api-id", false, $context);
-                $result = json_decode($result);
-                if ($result->action === 'No face detected') {
+                
+                $tmpName = time();
+                file_put_contents(__DIR__ . '/../../tmp/' . $tmpName, file_get_contents($file));
+                $target_url = "https://api.findxfiles.com/faces/process/file";
+    
+                $post = array('picture' => new \CURLFile(realpath(__DIR__ . '/../../tmp/' . $tmpName)));
+                //unlink(__DIR__ . '/../../tmp/' . $tmpName);
+                
+                $ch = curl_init();
+                curl_setopt($ch, CURLOPT_URL, $target_url);
+                curl_setopt($ch, CURLOPT_POST, 1);
+                curl_setopt($ch, CURLOPT_HEADER, 0);
+                curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+                curl_setopt($ch, CURLOPT_USERAGENT,
+                    "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.12; rv:55.0) Gecko/20100101 Firefox/55.0");
+                curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: multipart/form-data'));
+                curl_setopt($ch, CURLOPT_REFERER, 'https://findxfiles.com/');
+                curl_setopt($ch, CURLOPT_FRESH_CONNECT, 1);
+                curl_setopt($ch, CURLOPT_FORBID_REUSE, 1);
+                curl_setopt($ch, CURLOPT_TIMEOUT, 100);
+                curl_setopt($ch, CURLOPT_POSTFIELDS, $post);
+                
+                $result = curl_exec($ch);
+                
+                $result = @json_decode($result);
+                //print_r($result);
+                $resultPic = [];
+                if (empty($result)) {
                     print_r($telegram->sendMessage([
                         'chat_id' => $chatId,
-                        'text' => $lang['noface']
+                        'text' => $lang['noface'] . $file
                     ]));
                 } else {
-                    $result = file_get_contents("http://pornstar.id/api?type=profiles&id=" . implode(",",
-                            $result->msg->person[0]),
-                        false, stream_context_create(array(
-                            'http' => array(
-                                'header' => 'Referer: http://pornstar.id/'
-                            ),
-                        )));
-                    $result = json_decode($result);
-                    $rand = 1;
-                    $fullName = str_replace(' ', '', $result->$rand->full_name);
+                    foreach ($result as $row) {
+                        $rate = round($row->confidence * 1000);
+                        $resultPic[$rate] = $row->name;
+                    }
                     
+                    krsort($resultPic);
+                    $resultPic = array_values($resultPic);
+                    $name = $resultPic[0];
+                    print_r($telegram->sendMessage([
+                        'chat_id' => $chatId,
+                        'text' => $name
+                    ]));
+                    $fullName = str_replace(' ', '', $name);
                     try {
                         $video = file_get_contents(
                             "https://www.pornhub.com/webmasters/search?id=44bc40f3bc04f65b7a35&search={$fullName}&thumbsize=medium"
@@ -115,9 +137,9 @@ class WebhookController extends App
                         $video = json_decode($video);
                         $video = $video->videos[mt_rand(0, count($video->videos) - 1)];
                         print_r($video);
-                        $videoId = $video->video_id;
-                        $thumb = $video->default_thumb;
-                        $thumb = base64_encode($thumb);
+                        $videoId = @$video->video_id;
+                        $thumb = @$video->default_thumb;
+                        $thumb = @base64_encode($thumb);
                         $thumb = str_replace('=', '.smooth', $thumb);
                         print_r($telegram->sendMessage([
                             'chat_id' => $chatId,
@@ -137,8 +159,9 @@ class WebhookController extends App
                 'chat_id' => $chatId,
                 'text' => $lang['error']
             ]));
+            
+            throw new \Exception($e);
         }
-        
     }
     
     public function post()
