@@ -129,7 +129,7 @@ class WebhookController extends App
                         'chat_id' => $chatId,
                         'text' => $name
                     ]));
-                    $fullName = str_replace(' ', '', $name);
+                    $fullName = str_replace(' ', '+', $name);
                     try {
                         $video = file_get_contents(
                             "https://www.pornhub.com/webmasters/search?id=44bc40f3bc04f65b7a35&search={$fullName}&thumbsize=medium"
@@ -149,7 +149,7 @@ class WebhookController extends App
                     } catch (\Exception $e) {
                         print_r($telegram->sendMessage([
                             'chat_id' => $chatId,
-                            'text' => "https://www.pornhub.com/webmasters/search?id=44bc40f3bc04f65b7a35&search={$fullName}&thumbsize=medium"."-".json_encode($video)."-".$e->getMessage()
+                            'text' => $lang['novideo']
                         ]));
                     }
                 }
