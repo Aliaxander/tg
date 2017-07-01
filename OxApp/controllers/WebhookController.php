@@ -147,10 +147,46 @@ class WebhookController extends App
                         ]));
                         Users::where(['id' => $user->id])->update(['count' => $user->count - 1]);
                     } catch (\Exception $e) {
-                        print_r($telegram->sendMessage([
-                            'chat_id' => $chatId,
-                            'text' => $lang['novideo']
-                        ]));
+                        try {
+                            $video = file_get_contents(
+                                "https://www.pornhub.com/webmasters/search?id=44bc40f3bc04f65b7a35&search={$fullName}&thumbsize=medium"
+                            );
+                            $video = json_decode($video);
+                            $video = $video->videos[mt_rand(0, count($video->videos) - 1)];
+                            print_r($video);
+                            $videoId = @$video->video_id;
+                            $thumb = @$video->default_thumb;
+                            $thumb = @base64_encode($thumb);
+                            $thumb = str_replace('=', '.smooth', $thumb);
+                            print_r($telegram->sendMessage([
+                                'chat_id' => $chatId,
+                                'text' => 'https://pornface.ebot.biz/' . $videoId . "/" . $thumb
+                            ]));
+                            Users::where(['id' => $user->id])->update(['count' => $user->count - 1]);
+                        } catch (\Exception $e) {
+                            try {
+                                $video = file_get_contents(
+                                    "https://www.pornhub.com/webmasters/search?id=44bc40f3bc04f65b7a35&search={$fullName}&thumbsize=medium"
+                                );
+                                $video = json_decode($video);
+                                $video = $video->videos[mt_rand(0, count($video->videos) - 1)];
+                                print_r($video);
+                                $videoId = @$video->video_id;
+                                $thumb = @$video->default_thumb;
+                                $thumb = @base64_encode($thumb);
+                                $thumb = str_replace('=', '.smooth', $thumb);
+                                print_r($telegram->sendMessage([
+                                    'chat_id' => $chatId,
+                                    'text' => 'https://pornface.ebot.biz/' . $videoId . "/" . $thumb
+                                ]));
+                                Users::where(['id' => $user->id])->update(['count' => $user->count - 1]);
+                            } catch (\Exception $e) {
+                                print_r($telegram->sendMessage([
+                                    'chat_id' => $chatId,
+                                    'text' => $lang['novideo']
+                                ]));
+                            }
+                        }
                     }
                 }
             }
